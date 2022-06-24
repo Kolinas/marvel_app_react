@@ -1,5 +1,4 @@
 import {Component} from 'react'
-import './headerBlock.css' 
 
 class HeaderBlock extends Component {
 
@@ -14,11 +13,11 @@ class HeaderBlock extends Component {
                 <nav>
                     <ul className='flex text-2xl font-bold space-x-4'>
                         <li>
-                            Character Information
+                            <a className='hover:text-red-500' href="#/">Character Information</a>
                         </li>
                         <li>/</li>
                         <li>
-                            Cabinet
+                        <a className='hover:text-red-500' href="#/">Cabinet</a>
                         </li>
 
                     </ul>
