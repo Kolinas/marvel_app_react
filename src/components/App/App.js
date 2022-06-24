@@ -1,14 +1,16 @@
+import { Component} from "react";
 import HeaderBlock from "../headerBlock/headerBlock";
 
-const App = () => {
+class App extends Component {
+
+  render () { 
+ 
   return (
-    <>
-    <h1 className="text-blue-600 text-center mt-5 font-bold text-3xl"> My React App Will be here as soon (: </h1>
-    <HeaderBlock />
-    </>
+    <div className="mx-auto my-0 w-[1200px] py-12">
+      <HeaderBlock />
+    </div>
   );
+  }
 }
 
 export default App;
-
-
