@@ -1,39 +1,38 @@
 import {Component} from 'react'
-import abyss from '../heroesList/abyss.jpg'
-
 import MarvelQuerys from '../../querys/MarvelQuerys'
 
-const marvel = new MarvelQuerys()
-
-// marvel.getAllHeroes().then(data => console.log(data))
 
 class HeroesList extends Component {
 
     state = {
-        img: [],
-        loading: true
+        comicsList: [],
     }
 
     marvel = new MarvelQuerys()
 
     componentDidMount() {
-        this.marvel.getAllHeroes()
-        .then(this.imageLoad)
+        this.marvel.getAllComics()
+        .then(this.comicsLoad)
     }
 
-    imageLoad = (img) => {
+    comicsLoad = (comicsList) => {
         this.setState({
-            img, 
-            loading: false
+            comicsList 
         })
     }
 
-    createHeroCard (arr) {
-        return arr.map(img => {
+    createComicsCard (arr) {
+        return arr.map(comics => {
             return (
-                <li className='my-10 w-[200px] h-[200px]'>
-                <img className='object-cover w-full h-full' src={`${img}.jpg`} alt="" />
+                <li key={comics.id} className='mb-8'>
+                <p className='text-sm font-bold text-red-600 my-4 max-w-[210px] min-h-[60px] text-center'>{comics.title}</p>
+                <div className='w-[210px] h-[300px]'>
+                <img className='w-[100%] h-[100%]' src={comics.thumbnail} alt="" />
+                </div>
+                <div className='flex justify-between items-baseline'>
                 <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4'>Buy</button>
+                <p>{comics.price}</p>
+                </div>
             </li> 
             )
         })
@@ -41,14 +40,13 @@ class HeroesList extends Component {
 
     render() {
                 
-        const {img} = this.state
-        const heroImg = this.createHeroCard(img)
-        console.log(img);
+        const {comicsList} = this.state
+        const comicsCard = this.createComicsCard(comicsList)
 
         return(
-            <div className='w-[70%]'>
+            <div className='w-[75%] mt-5'>
                 <ul className='flex justify-between flex-wrap'>
-                    {heroImg}
+                    {comicsCard}
                 </ul>
             </div>
         )

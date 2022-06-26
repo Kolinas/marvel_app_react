@@ -13,13 +13,12 @@ class HeaderBlock extends Component {
                 <nav>
                     <ul className='flex text-2xl font-bold space-x-4'>
                         <li>
-                            <a className='hover:text-red-500' href="#/">Character Information</a>
+                            <a className='hover:text-red-500' href="#/">Comics Shop</a>
                         </li>
                         <li>/</li>
                         <li>
-                        <a className='hover:text-red-500' href="#/">Cabinet</a>
+                        <a className='hover:text-red-500' href="#/">Character Information</a>
                         </li>
-
                     </ul>
                 </nav>
             </header>

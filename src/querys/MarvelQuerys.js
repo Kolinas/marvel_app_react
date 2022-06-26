@@ -2,6 +2,8 @@ class MarvelQuerys {
     _apiUrl = 'https://gateway.marvel.com:443/v1/public/';
     _apiKey = 'apikey=968cc165f2be2b2088231fc0759e2132';
 
+    _baseOffset = 300;
+
     getData = async (url) => {
         let res = await fetch(url);
     
@@ -12,18 +14,23 @@ class MarvelQuerys {
         return await res.json();
     }
 
-    getAllHeroes = async () => {
-        const res = await this.getData(`${this._apiUrl}characters?limit=8&offset=310&${this._apiKey}`);
-        return res.data.results.map(item => item.thumbnail.path)
+    getAllComics = async () => {
+        const res = await this.getData(`${this._apiUrl}comics?orderBy=issueNumber&limit=8&offset=${this._baseOffset }&${this._apiKey}`);
+        return res.data.results.map(this._transformDataComics);
     }
 
-    getHeroe = (id) => {
-        return this.getData(`${this._apiUrl}characters/${id}?${this._apiKey}`);
+    rendomPrice = (max, min) => Math.floor(min+Math.random() * (max+1-min))
+
+    _transformDataComics = (comics) => {
+        return {
+            id: comics.id,
+            title: comics.title,
+            description: comics.description || 'There is no description',
+            thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+            price: comics.prices.price ? `${comics.prices.price}$` : `${this.rendomPrice(1,30)}$`
+        }
     }
 
-    // transformData = (hero) => {
-    //     return hero.thumbnail.path
-    // }
 }
 
 export default MarvelQuerys;
