@@ -10,14 +10,24 @@ class HeroesList extends Component {
             comicsList: [],
             loading: true,
             newComicsLoading: false,
+            offset: 8,
         }
     }
 
     marvel = new MarvelQuerys()
 
     componentDidMount() {
-        this.onRequest()
+        this.onRequest(this.state.offset)
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.offset !== prevState.offset) {
+            this.onRequest(this.state.offset)
+        }
+        console.log(this.state.offset);
+        console.log(prevState.offset);
+    }
+
 
     onRequest = (offset) => {
         this.comicsLoading()
@@ -31,15 +41,27 @@ class HeroesList extends Component {
         })
     }
 
-    comicsLoad = (newComicsList) => {
-        const imgStatus = newComicsList.map(comics => ({...comics, status: true}))
-        this.setState(({comicsList}) => ({ 
-            comicsList : [...comicsList, ...imgStatus],
-            loading: false,
-            newComicsLoading: false,
+    nextLoad = () => {
+        this.setState(({offset}) => ({
+            offset: offset + 8
         }))
     }
 
+    prevLoaded = () => {
+        this.setState(({offset}) => ({
+            offset: offset - 8
+        }))
+    }
+
+    comicsLoad = (newComicsList) => {
+        const imgStatus = newComicsList.map(comics => ({...comics, status: true}))
+        this.setState(({offset}) => ({ 
+            comicsList : [...imgStatus],
+            loading: false,
+            newComicsLoading: false,
+            offset: offset
+        }))
+    }
 
 
     createComicsCard = (arr) => {
@@ -59,7 +81,7 @@ class HeroesList extends Component {
             const desc = <p>{`${description.slice(0,300)}......`}</p>
 
             return (
-                <li key={id} className='mb-8'>
+                <li key={id} className='mb-8 hover:translate-y-[-5px] hover:shadow duration-300'>
                 <p className='text-sm font-bold text-red-600 my-4 max-w-[210px] min-h-[60px] text-center'>{title}</p>
                 <div onClick={()=> {
                     changeState()
@@ -77,9 +99,8 @@ class HeroesList extends Component {
     }
 
     render() {
-        console.log(this.state.comicsList);
                 
-        const {comicsList, loading} = this.state
+        const {comicsList, loading, newComicsLoading} = this.state
         const comicsCard = this.createComicsCard(comicsList)
 
         return(
@@ -88,8 +109,16 @@ class HeroesList extends Component {
                     {loading ? <Loader/> : comicsCard}
                 </ul>
                 <div className='flex justify-between'>
-                    <button className=''>Prev</button>
-                    <button className=''>Next</button>
+                    <button 
+                    onClick={this.prevLoaded}
+                    disabled={newComicsLoading}
+                    className='bg-red-700 w-[100px] rounded-[15px] text-white disabled:opacity-75 hover:scale-125 hover:text-blue-400'
+                    >Prev</button>
+                    <button 
+                    onClick={this.nextLoad}
+                    disabled={newComicsLoading}
+                    className='bg-red-700 w-[100px] rounded-[15px] text-white disabled:opacity-75 hover:scale-125 hover:text-blue-400'
+                    >Next</button>
                 </div>
             </div>
         )

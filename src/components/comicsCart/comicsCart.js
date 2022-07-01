@@ -1,15 +1,24 @@
-import {Component} from "react";
+import { Component } from "react";
 
 class ComicsCart extends Component {
-   
+
     sumTotalComic = (arr) => {
-        if(arr.length === 0) return 
+        if (arr.length === 0) return
         return arr.reduce((acc, el) => acc + el.count, 0)
     }
 
-    sumTotalPrice = (arr) => {
-        if(arr.length === 0) return 
-        return arr.reduce((acc, el) => acc + +el.price.slice(0,-1), 0)
+    sumAllPrice = (arr) => {
+
+        if (arr.length === 0) return
+        const totalSum = arr.map(comics => {
+
+            const { price, count } = comics
+            const totalComisSumm = parseInt(price) * count
+
+            return totalComisSumm
+        })
+
+        return totalSum.reduce((acc,el) => acc + el);
     }
 
 
@@ -17,12 +26,12 @@ class ComicsCart extends Component {
 
         return arr.map(order => {
 
-            const {id, title, price, thumbnail, count} = order
+            const { id, title, price, thumbnail, count } = order
             const total = price.slice(0, -1) * count
-           
+
 
             return (
-                <li key={id} className='mr-6 flex flex-col items-center w-[145px]'>
+                <li key={id} className='mr-6 flex flex-col items-center w-[145px] hover:translate-y-[5px]'>
                     <p className="text-center min-h-[100px]">
                         {title}
                     </p>
@@ -34,17 +43,17 @@ class ComicsCart extends Component {
                     </p>
                     <p>
                         Current count: {count}
-                        <button onClick={() => {this.props.incCartCount(order)}}>+</button>
-                        <button onClick={() => {this.props.decCartCount(order)}}>-</button>
+                        <button onClick={() => { this.props.incCartCount(order) }}>+</button>
+                        <button onClick={() => { this.props.decCartCount(order) }}>-</button>
                     </p>
                     <p className="text-red-700">
                         Total price: {total}$
                     </p>
-                    <button 
-                    className="bg-purple-200/50 w-[60px] rounded-[15px]"
-                    onClick={() => {
-                        this.props.removeCartItem(id)
-                    }}>Delete</button>
+                    <button
+                        className="bg-purple-200/50 w-[60px] rounded-[15px]"
+                        onClick={() => {
+                            this.props.removeCartItem(id)
+                        }}>Delete</button>
                 </li>
             )
         })
@@ -52,9 +61,11 @@ class ComicsCart extends Component {
 
     render() {
 
+
         const totalComics = this.sumTotalComic(this.props.orders)
-        const totalPrice = this.sumTotalPrice(this.props.orders)
         const orderCard = this.createOrderCard(this.props.orders)
+        const totalSum = this.sumAllPrice(this.props.orders)
+
 
         return (
             <div>
@@ -65,7 +76,7 @@ class ComicsCart extends Component {
                     You have <span className="text-red-700">{totalComics ? totalComics : 0}</span> Comics in cart
                 </div>
                 <div className="mt-6 text-center text-2xl">
-                Total price <span className="text-red-700">{totalPrice ? totalPrice : 0}</span>
+                    Total price <span className="text-red-700">{totalSum || 0 ? `${totalSum}$` : 0}</span>
                 </div>
             </div>
         )
