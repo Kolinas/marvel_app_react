@@ -11,6 +11,7 @@ class HeroesList extends Component {
             loading: true,
             newComicsLoading: false,
             offset: 8,
+            prevPage: false,
         }
     }
 
@@ -24,10 +25,7 @@ class HeroesList extends Component {
         if (this.state.offset !== prevState.offset) {
             this.onRequest(this.state.offset)
         }
-        console.log(this.state.offset);
-        console.log(prevState.offset);
     }
-
 
     onRequest = (offset) => {
         this.comicsLoading()
@@ -43,12 +41,19 @@ class HeroesList extends Component {
 
     nextLoad = () => {
         this.setState(({offset}) => ({
-            offset: offset + 8
+            offset: offset + 8,
+            prevPage: false
         }))
     }
 
     prevLoaded = () => {
-        this.setState(({offset}) => ({
+        if (this.state.offset <= 8){
+         this.setState(({prevPage}) => ({
+                prevPage: !prevPage,
+            }))
+        }
+
+         this.setState(({offset}) => ({
             offset: offset - 8
         }))
     }
@@ -100,7 +105,7 @@ class HeroesList extends Component {
 
     render() {
                 
-        const {comicsList, loading, newComicsLoading} = this.state
+        const {comicsList, loading, newComicsLoading, offset, prevPage} = this.state
         const comicsCard = this.createComicsCard(comicsList)
 
         return(
@@ -110,12 +115,12 @@ class HeroesList extends Component {
                 </ul>
                 <div className='flex justify-between'>
                     <button 
-                    onClick={this.prevLoaded}
-                    disabled={newComicsLoading}
+                    onClick={() => this.prevLoaded(offset)}
+                    disabled={newComicsLoading || prevPage}
                     className='bg-red-700 w-[100px] rounded-[15px] text-white disabled:opacity-75 hover:scale-125 hover:text-blue-400'
                     >Prev</button>
                     <button 
-                    onClick={this.nextLoad}
+                    onClick={() => this.nextLoad()}
                     disabled={newComicsLoading}
                     className='bg-red-700 w-[100px] rounded-[15px] text-white disabled:opacity-75 hover:scale-125 hover:text-blue-400'
                     >Next</button>

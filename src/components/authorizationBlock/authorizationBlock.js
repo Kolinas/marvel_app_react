@@ -41,3 +41,4 @@ class AuthorizationBlock extends Component {
 }
 
 export default AuthorizationBlock
+

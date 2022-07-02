@@ -8,17 +8,7 @@ class ComicsCart extends Component {
     }
 
     sumAllPrice = (arr) => {
-
-        if (arr.length === 0) return
-        const totalSum = arr.map(comics => {
-
-            const { price, count } = comics
-            const totalComisSumm = parseInt(price) * count
-
-            return totalComisSumm
-        })
-
-        return totalSum.reduce((acc,el) => acc + el);
+        return arr.length !== 0 ? arr.reduce((acc,comics) => parseInt(comics.price) * comics.count + acc, 0) : null
     }
 
 
@@ -31,7 +21,7 @@ class ComicsCart extends Component {
 
 
             return (
-                <li key={id} className='mr-6 flex flex-col items-center w-[145px] hover:translate-y-[5px]'>
+                <li key={id} className='mr-6 flex flex-col items-center w-[145px]'>
                     <p className="text-center min-h-[100px]">
                         {title}
                     </p>
@@ -66,6 +56,7 @@ class ComicsCart extends Component {
         const orderCard = this.createOrderCard(this.props.orders)
         const totalSum = this.sumAllPrice(this.props.orders)
 
+        const showTotalPrice = <p>Total price <span className="text-red-700">{totalSum ? `${totalSum}$` : 0}</span></p>
 
         return (
             <div>
@@ -76,7 +67,7 @@ class ComicsCart extends Component {
                     You have <span className="text-red-700">{totalComics ? totalComics : 0}</span> Comics in cart
                 </div>
                 <div className="mt-6 text-center text-2xl">
-                    Total price <span className="text-red-700">{totalSum || 0 ? `${totalSum}$` : 0}</span>
+                    {!!totalSum ? showTotalPrice : null}
                 </div>
             </div>
         )
