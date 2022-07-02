@@ -9,8 +9,50 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      orderList: []
+      orderList: [],
+      user: {
+        email: '',
+        password: ''
+      },
+      isLoged: false
     }
+  }
+
+  takeEmail = (e) => {
+    this.setState(({ user }) => ({
+      user: {
+        email: e.target.value,
+        password: user.password
+      }
+    }))
+  }
+
+  takePasword = (e) => {
+    this.setState(({ user }) => ({
+      user: {
+        email: user.email,
+        password: e.target.value,
+      }
+    }))
+  }
+
+  onEnter = (e) => {
+    e.preventDefault();
+    if (this.state.user.email) {
+      this.setState(({ userEnter }) => ({
+        userEnter: !userEnter
+      }))
+    }
+  }
+
+  onLogOut = () => {
+    this.setState(({ userEnter }) => ({
+      userEnter: !userEnter,
+      user: {
+        email: '',
+        password: ''
+      },
+    }))
   }
 
   addToCart = (order) => {
@@ -69,16 +111,23 @@ class App extends Component {
           <>
           <HeroesList 
           addToCart={this.addToCart}/>
-          <AuthorizationBlock/>
+          <AuthorizationBlock
+            password={this.takePasword}
+            email={this.takeEmail}
+            onEnter={this.onEnter}
+            onLogOut={this.onLogOut}
+            user ={this.state.user}
+            isLoged={this.state.userEnter}
+          />
           </>
           }
           />    
           <Route path='/cart' 
           element={<ComicsCart 
-          orders={this.state.orderList} 
-          incCartCount={this.incCartCount}
-          decCartCount={this.decCartCount}
-          removeCartItem={this.removeCartItem}
+            orders={this.state.orderList} 
+            incCartCount={this.incCartCount}
+            decCartCount={this.decCartCount}
+            removeCartItem={this.removeCartItem}
           />}/>
       </Routes>
       </main>
