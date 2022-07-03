@@ -71,7 +71,7 @@ const NoLoginUser = (props) => {
             <input
                 // value={this.state.user.password}
                 onChange={password}
-                className="rounded-3xl" type="text" />
+                className="rounded-3xl" type="password" />
             <button
                 onClick={onEnter}
                 className="px-1 py-1 bg-white mt-4 rounded-3xl"

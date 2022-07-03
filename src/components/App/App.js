@@ -103,7 +103,7 @@ class App extends Component {
  
   return (
     <BrowserRouter>
-    <div className="mx-auto my-0 w-[1200px] py-12">
+    <div className="mx-auto my-0 w-[1200px] py-12 container">
       <HeaderBlock/>
       <main className="flex">
       <Routes>

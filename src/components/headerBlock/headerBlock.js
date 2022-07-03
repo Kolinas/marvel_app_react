@@ -5,7 +5,8 @@ class HeaderBlock extends Component {
 
     render() {
         return (
-            <header className="flex justify-between text-2xl py-8 font-bold bg-[url('../public/img/header.jpg')] bg-center bg-no-repeat bg-contain">
+            <header 
+            className="sm:justify-between sm:flex-row flex-col flex text-2xl lg:py-8 font-bold bg-[url('../public/img/header.jpg')] bg-center bg-no-repeat bg-contain">
                 <h1>
                     <Link to='/'>
                         <span className='text-red-700'>Comics</span> Marvel Shop
