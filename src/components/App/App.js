@@ -1,4 +1,4 @@
-import { Component} from "react";
+import { Component, createRef} from "react";
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import HeaderBlock from "../headerBlock/headerBlock";
 import HeroesList from "../heroesList/HeroesList";
@@ -16,15 +16,36 @@ class App extends Component {
       },
       isLoged: false
     }
+    this.myRef = createRef()
+  }
+
+  componentDidMount() {
+    this.checkLocalStorage()
+  }
+
+  checkLocalStorage = () => {
+    const items = JSON.parse(localStorage.getItem('orderList'))
+    if (items) {
+      return this.setState({
+        orderList: items
+      })
+    }
+  }
+
+  changeLocalStorage = (item, value) => {
+    return localStorage.setItem(item, JSON.stringify(value))
   }
 
   takeEmail = (e) => {
-    this.setState(({ user }) => ({
-      user: {
-        email: e.target.value,
-        password: user.password
+    const isEmail = /(.+)@(.+){2,}\.(.+){2,}/i.test(e.target.value);
+      if (isEmail) {
+        this.setState(({ user }) => ({
+          user: {
+            email: e.target.value,
+            password: user.password
+          }
+        }))
       }
-    }))
   }
 
   takePasword = (e) => {
@@ -38,11 +59,13 @@ class App extends Component {
 
   onEnter = (e) => {
     e.preventDefault();
-    if (this.state.user.email) {
-      this.setState(({ userEnter }) => ({
-        userEnter: !userEnter
-      }))
-    }
+        if(this.state.user.email){
+        return this.setState(({ userEnter }) => ({
+            userEnter: !userEnter
+          }))
+        }
+
+        return this.state.user.email
   }
 
   onLogOut = () => {
@@ -66,11 +89,13 @@ class App extends Component {
     orderList = [...this.state.orderList, {...order, count: 1}]
     
     this.setState({orderList})
+    this.changeLocalStorage('orderList', orderList)
   }
 
   incCartCount = (comics) => {
     this.setState(({orderList}) => {
       const newOrderList = orderList.map(item => item.id === comics.id ? {...item, count: item.count+1} : item )
+      this.changeLocalStorage('orderList', newOrderList)
       return {
         orderList: newOrderList
       }
@@ -83,15 +108,17 @@ class App extends Component {
         if (comics.count <=1) {
           newOrderList = orderList.map(item => item.id === comics.id ? {...item, count: 1} : item )
         }
+        this.changeLocalStorage('orderList', newOrderList)
       return {
         orderList: newOrderList
       }
-  })
+   })
   }
 
   removeCartItem = (id) => {
     this.setState(({orderList}) => {
       const newCartList = orderList.filter(comics => comics.id !== id)
+      this.changeLocalStorage('orderList', newCartList)
       return {
         orderList: newCartList
       }

@@ -1,18 +1,21 @@
-import { Component } from "react";
+import { Component} from "react";
 
 
 
 class AuthorizationBlock extends Component {
 
 
-    checkMail = (e) => {
-        // e.preventDefault()
-        // const isEmail = /^[a-z0-9.]{1,64}@[a-z0-9.]{1,64}$/i.test(e.target.value);
-        // console.log(isEmail, e.target.value)
-        // return isEmail ? hi : by; 
-
+    componentDidUpdate() {
+        this.checkUser(this.props.user.email)
     }
 
+
+     checkUser = (user) => {
+        // if (!user){
+        //     return 'write correct e-mail'
+        // }
+        console.log('hi');
+    }
 
     render() {
 
@@ -31,9 +34,11 @@ class AuthorizationBlock extends Component {
             />
             :
            <NoLoginUser 
+           user={user}
            password={password} 
            email={email}
            onEnter={onEnter}
+           checkUser={this.checkUser}
            />
            }
             </>
@@ -57,7 +62,10 @@ const ViewUser = (props) => {
 
 const NoLoginUser = (props) => {
 
-    const {password, email, onEnter} = props
+    const {password, email, onEnter, user} = props
+
+
+    console.log(user.email);
 
     return(
         <div className="mt-8 max-h-[180px] ml-5 bg-red-600/75 p-5 rounded-lg">
@@ -66,6 +74,7 @@ const NoLoginUser = (props) => {
             <input
                 // value={this.state.user.email}
                 onChange={email}
+                // placeholder={checkUser(user.email)}
                 className="rounded-3xl" type="text" />
             <h4>Password</h4>
             <input
